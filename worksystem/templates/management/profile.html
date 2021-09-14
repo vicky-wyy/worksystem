@@ -1,0 +1,141 @@
+{% extends 'base/index_base.html' %}
+
+{% block style %}
+<style>
+    .ui.list .item {
+        padding: 10px 0px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pusher">
+    <div class="ui segment">
+        <div class="ui breadcrumb">
+            <a class="section">首页</a>
+            <div class="divider">/</div>
+            <a class="section">个人中心</a>
+        </div>
+        <div class="ui top pointing dropdown" style="left: 1025px;">
+            <div class="text">{{current_user.itcode}}</div>
+            <i class="dropdown icon"></i>
+            <div class="menu" id="dropdown">
+                <a class="item" href="{{ url_for('management.profile') }}">个人中心</a>
+                <a class="item" href="{{ url_for('users.logout') }}">退出登录</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="ui grid">
+            <div class="four wide column" style="margin-left: 10px;">
+                <div class="ui raised segment">
+                    <div class="header">个人信息</div>
+                    <div class="ui divider"></div>
+                    <img class="ui centered small circular image" src="{{ url_for('static',filename='images/profile.jpg') }}">
+                    <div class="ui divider"></div>
+                    <div class="fields">
+                        <div class="field">
+                            <div class="ui top aligned divided list">
+                                <div class="item">
+                                    <div class="right floated content">
+                                        {{ current_user.itcode }}
+                                    </div>
+                                    <div class="content">
+                                        <i class="user icon"></i>
+                                        用户姓名
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="right floated content">
+                                        {{ current_user.phonenumber}}
+                                    </div>
+                                    <div class="content">
+                                        <i class="icon mobile alternate"></i>
+                                        手机号码
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="right floated content">
+                                        {{ current_user.email }}
+                                    </div>
+                                    <div class="content">
+                                        <i class="icon envelope"></i>
+                                        邮箱地址
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="right floated content">
+                                        {{ current_user.dept}}
+                                    </div>
+                                    <div class="content">
+                                        <i class="sitemap icon"></i>
+                                        所属部门
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="right floated content">
+                                        {{ current_user.roles}}
+                                    </div>
+                                    <div class="content">
+                                        <i class="icon users"></i>
+                                        所属角色
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <div class="right floated content">
+                                        {{ current_user.create_time}}
+                                    </div>
+                                    <div class="content">
+                                        <i class="icon calendar"></i>
+                                        创建日期
+                                    </div>
+                                </div>
+                                <div class="item"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="nine wide column">
+                <div class="ui raised segment">
+                    <div class="header">基本资料</div>
+                    <div class="ui divider"></div>
+                    <div class="ui secondary pointing teal menu">   
+                        <a class="item active">
+                            基本资料
+                        </a>
+                        <a class="item">
+                            修改密码
+                        </a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        $('.top.aligned.modal')
+            .modal({
+                closable: true,
+                class: 'mini',
+                onApprove: function () {
+                    window.alert('修改成功');
+                }
+            }).modal('attach events', '.ui.button.edit', 'show');
+        $('.ui.menu a.item')
+            .on('click',function(){
+                $(this)
+                    .addClass('active')
+                    .siblings()
+                    .removeClass('active')
+            })
+    });
+</script>
+{% endblock %}

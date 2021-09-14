@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="{{ url_for('static',filename='semantic/dist/jquery.min.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static',filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='semantic/dist/semantic.min.css') }}">
+    <script src="{{ url_for('static',filename='semantic/dist/semantic.min.js') }}"></script>
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='semantic/dist/jquery.dataTables.css') }}">
+    <script src="{{ url_for('static',filename='semantic/dist/jquery.dataTables.js') }}"></script>
+    <title>{% block title %}{% endblock %} 后台管理系统</title>
+    <style>
+        body.pushable {
+            overflow-y: scroll;
+        }
+
+        body.pushable>.pusher {
+            min-height: 100%;
+        }
+
+        body.pushable {
+            background-color: #fff;
+        }
+    </style>
+    {% block style %}{% endblock %}
+    <script>
+        $(document).ready(function () {
+            $('.visible .ui.sidebar')
+                .sidebar({
+                    context: '.visible .bottom.segment'
+                }).sidebar('hide');
+            $('.ui.dropdown')
+                .dropdown();
+        });
+    </script>
+    {% block javascript %}{% endblock %}
+
+</head>
+
+<body>
+    <div class="ui bottom attached pushable">
+        <div class="ui visible vertical inverted left sidebar menu" style="background-color:rgb(48,65,86);">
+            <div class="item" style="height: 57px;">
+                <div class="ui logo icon image">
+                    <img src="{{ url_for('static',filename='images/logo.png') }}" style="width:40px">
+                </div>
+                <b style="margin: 20px 50px;">若依管理系统</b>
+            </div>
+            <a class="item" href="{{ url_for('management.index') }}">
+                <i class="user icon"></i>
+                <b>用户管理</b>
+            </a>
+            <a class="item" href="{{ url_for('management.roles') }}">
+                <i class="users icon"></i>
+                <b>角色管理</b>
+            </a>
+            <a class="item" href="{{ url_for('management.post') }}">
+                <i class="server icon"></i>
+                <b>岗位管理</b>
+            </a>
+            <a class="item" href="{{ url_for('management.dept') }}">
+                <i class="sitemap icon"></i>
+                <b>部门管理</b>
+            </a>
+        </div>
+        <div class='pusher'>
+            <div class="container">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        >
+    </div>
+    <div style="clear: both;"></div>
+</body>
+
+</html>

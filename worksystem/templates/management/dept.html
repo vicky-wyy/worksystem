@@ -1,0 +1,73 @@
+{% extends 'base/index_base.html' %}
+
+{% block style %}
+<style>
+      * {
+        margin: 0;
+        padding: 0;
+    }
+
+    #users {
+        left: 1125px;
+        height: auto;
+    }
+
+    #dropdown {
+        height: 80px;
+    }
+
+    #table-buttons {
+        margin: 30px 20px;
+    }
+
+    .ui.button {
+        padding: 10px 15px;
+        margin-right: 10px;
+    }
+
+    #status {
+        height: 75px;
+    }
+
+    .labels {
+        margin-top: 10px;
+    }
+
+    .ui.input {
+        width: 270px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pusher">
+    <div class="ui segment" style="height: 57px;border-radius: 0;">
+        <div class="ui breadcrumb">
+            <a class="section">首页</a>
+            <div class="divider">/</div>
+            <a class="section">部门管理</a>
+        </div>
+        <div class="ui top pointing dropdown" style="left: 1025px;">
+            <div class="text">用户名</div>
+            <i class="dropdown icon"></i>
+            <div class="menu" id="dropdown">
+                <a class="item" href="{{ url_for('management.profile') }}">个人中心</a>
+                <a class="item" href="{{ url_for('users.logout') }}">退出登录</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="ui grid">
+            <div class="three wide column" style="margin-left: 20px;">
+                <label><b>岗位编号</b></label>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

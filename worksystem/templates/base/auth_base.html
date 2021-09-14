@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="{{ url_for('static',filename='semantic/dist/jquery.min.js') }}"></script>
+    <link rel="icon" href="{{ url_for('static',filename='images/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='semantic/dist/semantic.min.css') }}">
+    <script src="{{ url_for('static',filename='semantic/dist/semantic.min.js') }}"></script>
+    <title>{% block title %}{% endblock %} 后台管理系统</title>
+    <style>
+        body{
+            background:url("{{url_for('static',filename='images/login-background.jpg')}}") no-repeat center center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+    </style>
+    {% block style %}{% endblock %}
+
+    <javascript>
+    </javascript>
+    {% block javascript %}{% endblock %}
+
+</head>
+<body>
+    {% block content %}
+    
+    {% endblock %}
+</body>
+</html>

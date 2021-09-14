@@ -1,0 +1,330 @@
+{% extends 'base/index_base.html' %}
+
+{% block style %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    .pusher .segment{
+        height: 57px;
+        border-radius: 0;
+    }
+    #users {
+        left: 1125px;
+        height: auto;
+    }
+
+    #dropdown {
+        height: 80px;
+    }
+
+    #table-buttons {
+        margin: -25px 20px;
+    }
+
+    .ui.button {
+        padding: 10px 15px;
+        margin-top: 13px;
+    }
+
+    #status {
+        height: 75px;
+    }
+
+    .labels {
+        margin-top: 20px;
+    }
+
+    .ui.input {
+        top: -27px;
+        left: 70px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pusher">
+    <div class="ui segment">
+        <div class="ui breadcrumb">
+            <a class="section">首页</a>
+            <div class="divider">/</div>
+            <a class="section">岗位管理</a>
+        </div>
+        <div class="ui top pointing dropdown" style="left: 1025px;">
+            <div class="text">{{current_user.itcode}}</div>
+            <i class="dropdown icon"></i>
+            <div class="menu" id="dropdown">
+                <a class="item" href="{{ url_for('management.profile') }}">个人中心</a>
+                <a class="item" href="{{ url_for('users.logout') }}">退出登录</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="ui grid">
+            <div class="three wide column" style="margin-left: 20px;">
+                <div class="labels">
+                    <label><b>岗位编号</b></label>
+                </div>
+                <div class="ui input">
+                    <input type="text" placeholder="请输入岗位编号">
+                </div>
+            </div>
+            <div class="three wide column">
+                <div class="labels">
+                    <label><b>岗位名称</b></label>
+                </div>
+                <div class="ui input">
+                    <input type="text" placeholder="请输入岗位名称">
+                </div>
+            </div>
+            <div class="one wide column">
+                <div class="labels">
+                     <label><b>角色状态</b></label>
+                </div>
+            </div>
+            <div class="three wide column">
+                <div class="ui selection dropdown" style="margin-left: -17px;margin-top: 12px;">
+                    <input type="hidden" name="用户状态">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">用户状态</div>
+                    <div class="menu" id="status">
+                        <div class="item" data-value="0">正常</div>
+                        <div class="item" data-value="1">停用</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="three wide column">
+                <div class="ui primary button">
+                    <i class="search icon"></i>
+                    搜索
+                </div>
+                <div class="ui clear button">
+                    <i class="icon sync alternate"></i>
+                    重置
+                </div>
+            </div>
+        </div>
+
+        <div class="ui grid" id="table-buttons">
+            <div class="small ui primary basic added button">
+                <i class="icon add"></i>
+                新增
+            </div>
+        </div>
+
+        <div class="ui grid">
+            <div class="twelve wide column" style="margin:20px;">
+                <table class="ui selectable celled center aligned very compact single line table">
+                    <thead>
+                        <tr>
+                            <th>岗位编号</th>
+                            <th>岗位编码</th>
+                            <th>岗位名称</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>CEO</td>
+                            <td>董事长</td>
+                            <td>
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" name="状态" checked="checked">
+                                    <label></label>
+                                </div>
+                            </td>
+                            <td>2021-08-25</td>
+                            <td>
+                                <div class="mini ui primary basic edit button">
+                                    <i class="icon edit"></i>
+                                    修改
+                                </div>
+                                <div class="mini ui negative basic delete button">
+                                    <i class="icon trash alternate"></i>
+                                    删除
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>CTO</td>
+                            <td>技术总监</td>
+                            <td>
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" name="状态" checked="checked">
+                                    <label></label>
+                                </div>
+                            </td>
+                            <td>2021-08-25</td>
+                            <td>
+                                <div class="mini ui primary basic edit button">
+                                    <i class="icon edit"></i>
+                                    修改
+                                </div>
+                                <div class="mini ui negative basic delete button">
+                                    <i class="icon trash alternate"></i>
+                                    删除
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Hardware Engineer</td>
+                            <td>硬件工程师</td>
+                            <td>
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" name="状态" checked="checked">
+                                    <label></label>
+                                </div>
+                            </td>
+                            <td>2021-08-25</td>
+                            <td>
+                                <div class="mini ui primary basic edit button">
+                                    <i class="icon edit"></i>
+                                    修改
+                                </div>
+                                <div class="mini ui negative basic delete button">
+                                    <i class="icon trash alternate"></i>
+                                    删除
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Test Engineer</td>
+                            <td>测试工程师</td>
+                            <td>
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" name="状态" checked="checked">
+                                    <label></label>
+                                </div>
+                            </td>
+                            <td>2021-08-25</td>
+                            <td>
+                                <div class="mini ui primary basic edit button">
+                                    <i class="icon edit"></i>
+                                    修改
+                                </div>
+                                <div class="mini ui negative basic delete button">
+                                    <i class="icon trash alternate"></i>
+                                    删除
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 新增按钮弹窗 -->
+        <div class="ui tiny modal added">
+            <div class="header">添加岗位</div>
+            <div class="content">
+                <div class="ui form">
+                    <div class="inline field">
+                        <label>岗位名称</label>
+                        <input type="text" placeholder="请输入岗位名称" style="width:350px;">
+                    </div>
+                    <div class="inline field">
+                        <label>岗位编码</label>
+                        <input type="text" placeholder="请输入编码名称"  style="width:350px;">
+                    </div>
+                    
+                    <div class="inline field">
+                        <label>岗位状态</label>
+                        <div class="ui radio blue checkbox" style="margin-right: 80px;">
+                            <input type="radio" name="radio" checked="checked">
+                            <label>正常</label>
+                        </div>
+                        <div class="ui radio blue checkbox">
+                            <input type="radio" name="radio">
+                            <label>停用</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui primary ok button">确定</div>
+                <div class="ui basic cancel button">取消</div>
+            </div>
+        </div>
+
+        <!-- 修改弹窗按钮 -->
+        <div class="ui tiny modal edit">
+            <div class="header">修改岗位</div>
+            <div class="content">
+                <div class="ui form">
+                    <div class="inline field">
+                        <label>岗位名称</label>
+                        <input type="text" placeholder="获取岗位名称信息" style="width:350px;">
+                    </div>
+                    <div class="inline field">
+                        <label>岗位编码</label>
+                        <input type="text" placeholder="获取岗位编码" style="width:350px;">
+                    </div>
+                    <div class="inline field">
+                        <label>岗位状态</label>
+                        <div class="ui radio blue checkbox" style="margin-right: 80px;">
+                            <input type="radio" name="radio" checked="checked">
+                            <label>正常</label>
+                        </div>
+                        <div class="ui radio blue checkbox">
+                            <input type="radio" name="radio">
+                            <label>停用</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions">
+                <div class="ui primary ok button">确定</div>
+                <div class="ui basic cancel button">取消</div>
+            </div>
+        </div>
+
+        <!-- 删除弹窗按钮 -->
+        <div class="ui mini modal delete">
+            <div class="header">警告</div>
+        <div class="content">
+            <div class="field">
+                <i class="icon exclamation circle"></i>
+                是否确认删除用户编号为{{"获取用户编号"}}的数据项?
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui primary ok button">
+                确定
+            </div>
+            <div class="ui basic cancel button">
+                取消
+            </div>
+        </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function(){
+        $('.added.modal')
+            .modal({
+                closeIcon:true
+            }).modal('attach events','.added.button','show')
+        $('.edit.modal')
+            .modal({
+                closeIcon:true
+            }).modal('attach events','.edit.button','show')
+        $('.delete.modal')
+            .modal({
+                closeIcon:true
+            }).modal('attach events','.delete.button','show')
+    });
+</script>
+{% endblock %}

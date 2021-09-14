@@ -1,0 +1,456 @@
+{% extends 'base/index_base.html' %}
+
+{% block style %}
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .pusher .segment {
+        height: 57px;
+        border-radius: 0;
+    }
+
+    /* #users {
+        left: 1125px;
+        height: auto;
+    } */
+
+    #dropdown {
+        height: 80px;
+    }
+
+    #table-buttons {
+        margin: 25px 20px;
+    }
+
+    .ui.button {
+        padding: 10px 15px;
+        margin-right: 10px;
+    }
+
+    #status {
+        height: 75px;
+    }
+
+    .labels {
+        margin-top: 10px;
+    }
+
+    .ui.input {
+        width: 270px;
+    }
+
+    .field.added {
+        width: 300px;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="pusher">
+    <div class="ui segment">
+        <div class="ui breadcrumb">
+            <a class="section">首页</a>
+            <div class="divider">/</div>
+            <a class="section">用户管理</a>
+        </div>
+        <div class="ui top pointing dropdown" style="left:1025px;">
+            <div class="text">{{ current_user.itcode }}</div>
+            <i class="dropdown icon"></i>
+            <div class="menu" id="dropdown">
+                <a class="item" href="{{ url_for('management.profile') }}">个人中心</a>
+                <a class="item" href="{{ url_for('users.logout') }}">退出登录</a>
+            </div>
+        </div>
+    </div>
+    <div class="ui basic segment">
+        <div class="ui grid">
+            <div class="four wide column">
+                <label><b>用户名称</b></label>&nbsp;&nbsp;
+                <div class="ui input">
+                    <input type="text" placeholder="请输入用户名称">
+                </div>
+            </div>
+            <div class="four wide column">
+                <label><b>手机号码</b></label>&nbsp;&nbsp;
+                <div class="ui input">
+                    <input type="text" placeholder="请输入手机号码">
+                </div>
+
+            </div>
+            <div class="one wide column" style="margin-top:8px">
+                <label><b>用户状态</b></label>
+            </div>
+            <div class="four wide column" style="margin-left: -30px">
+                <div class="ui selection dropdown" style="width:280px;">
+                    <input type="hidden" name="用户状态">
+                    <i class="dropdown icon"></i>
+                    <div class="default text">用户状态</div>
+                    <div class="menu" id="status">
+                        <div class="item" data-value="0">正常</div>
+                        <div class="item" data-value="1">停用</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui basic segment">
+        <div class="ui grid">
+            <div class="one wide column">
+                <div class="labels">
+                    <label><b>开始日期</b></label>
+                </div>
+            </div>
+
+            <div class="four wide column" style="margin-left: -30px;">
+                <div class="ui calendar" id="rangestart">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="开始日期">
+                    </div>
+                </div>
+            </div>
+            <div class="one wide column" style="margin-left:-65px;">
+                <div class="labels">
+                    <label><b>结束日期</b></label>
+                </div>
+            </div>
+            <div class="four wide column" style="margin-left:-30px;">
+                <div class="ui calendar" id="rangeend">
+                    <div class="ui input left icon">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="结束日期">
+                    </div>
+                </div>
+            </div>
+            <div class="five wide column" style="margin-left: -65px;">
+                <div class="ui primary button">
+                    <i class="search icon"></i>
+                    搜索
+                </div>
+                <div class="ui clear button">
+                    <i class="icon sync alternate"></i>
+                    重置
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui grid" id="table-buttons">
+        <div class="small ui primary basic added button">
+            <i class="icon add"></i>
+            新增
+        </div>
+    </div>
+
+    <div class="ui grid">
+        <div class="twelve wide column" style="margin-left:20px;margin-top: -30px;">
+            <table class="ui selectable celled center aligned very compact single line table" id="users-table">
+                <thead>
+                    <tr>
+                        <th>itcode</th>
+                        <th>部门</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>{{current_user.itcode}}</td>
+                        <td>{{current_user.email}}</td>
+                        <td>
+                            <div class="ui toggle checkbox">
+                                <input type="checkbox" name="状态" checked="checked">
+                                <label></label>
+                            </div>
+                        </td>
+                        <td>{{current_user.create_time}}</td>
+                        <td>
+                            <div class="mini ui primary basic edit button">
+                                <i class="icon edit"></i>
+                                修改
+                            </div>
+                            <div class="mini ui teal basic reset button">
+                                <i class="icon mercury"></i>
+                                重置
+                            </div>
+                            <div class="mini ui negative basic delete button">
+                                <i class="icon trash alternate"></i>
+                                删除
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <!-- 编辑按钮弹窗 -->
+    <div class="ui tiny modal edit">
+        <div class="header">修改用户</div>
+        <div class="content">
+            <div class="ui form">
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>用户姓名</b></label>
+                    </div>
+                    <div class="field">
+                        <input type="text" value="{{current_user.username}}">
+                    </div>
+                    <div class="labels">
+                        <label><b>归属部门</b></label>
+                    </div>
+                    <div class="field">
+                        <input type="text" value="{{current_user.dept}}">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>手机号码</b></label>
+                    </div>
+                    <div class="field">
+                        <input type="text" value="{{current_user.phonenumber}}">
+                    </div>
+                    <div class="labels">
+                        <label><b>邮箱地址</b></label>
+                    </div>
+                    <div class="field">
+                        <input type="email" value="{{current_user.email}}">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>用户性别</b></label>
+                    </div>
+                    <div class="field" style="width:200px">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="性别">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">性别</div>
+                            <div class="menu">
+                                <div class="item">男</div>
+                                <div class="item">女</div>
+                                <div class="item">未知</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="labels">
+                        <label><b>用户状态</b></label>
+                    </div>
+                    <div class="field" style="margin-top: -20px;">
+                        <div class="ui radio blue checkbox" id="checkbox">
+                            <input type="radio" name="radio" checked="checked">
+                            <label>正常</label>
+                        </div>
+                        <div class="ui radio blue checkbox" id="checkbox">
+                            <input type="radio" name="radio">
+                            <label>停用</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui primary ok button">确定</div>
+            <div class="ui basic cancel button">取消</div>
+        </div>
+    </div>
+
+    <!-- 重置按钮弹窗 -->
+    <div class="ui tiny modal reset">
+        <div class="header">提示</div>
+        <div class="content">
+            <div class="two fields">
+                <div class="field">
+                    <label>请输入{{current_user.username}}的新密码</label>
+                </div>
+            </div>
+            <br>
+            <div class="field">
+                <div class="ui input" style="width:100%;">
+                    <input type="text">
+                </div>
+            </div>
+            <br>
+        </div>
+        <div class="actions">
+            <div class="ui primary ok button">
+                确定
+            </div>
+            <div class="ui basic cancel button">
+                取消
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除按钮弹窗 -->
+    <div class="ui tiny modal delete">
+        <div class="header">警告</div>
+        <div class="content">
+            <div class="field">
+                <i class="icon exclamation circle"></i>
+                是否确认删除用户编号为{{current_user.id}}的数据项?
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui primary ok button">
+                确定
+            </div>
+            <div class="ui basic cancel button">
+                取消
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增用户弹窗 -->
+    <div class="ui modal added">
+        <div class="header">添加用户</div>
+        <div class="center aligned content">
+            <div class="ui form">
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>用户姓名</b></label>
+                    </div>
+                    <div class="field added">
+                        <input type="text" placeholder="请输入用户名">
+                    </div>&nbsp;&nbsp;
+                    <div class="labels">
+                        <label><b>归属部门</b></label>
+                    </div>
+                    <div class="field added">
+                        <input type="text" placeholder="请输入所属部门">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>手机号码</b></label>
+                    </div>
+                    <div class="field added">
+                        <input type="text" placeholder="请输入手机号码">
+                    </div>&nbsp;&nbsp;
+                    <div class="labels">
+                        <label><b>邮箱地址</b></label>
+                    </div>
+                    <div class="field added">
+                        <input type="text" placeholder="请输入邮箱地址">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>用户性别</b></label>
+                    </div>
+                    <div class="field added">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="用户性别">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">请选择</div>
+                            <div class="menu">
+                                <div class="item">男</div>
+                                <div class="item">女</div>
+                                <div class="item">未知</div>
+                            </div>
+                        </div>
+                    </div>&nbsp;&nbsp;
+                    <div class="labels">
+                        <label><b>用户密码</b></label>
+                    </div>
+                    <div class="field added">
+                        <input type="text" placeholder="请输入密码">
+                    </div>
+                </div>
+                <div class="fields">
+                    <div class="labels">
+                        <label><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;岗位</b></label>
+                    </div>
+                    <div class="field added">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="岗位">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">请选择</div>
+                            <div class="scrollhint menu">
+                                <div class="item">董事长</div>
+                                <div class="item">总裁</div>
+                                <div class="item">副总裁</div>
+                                <div class="item">项目经理</div>
+                                <div class="item">人力资源</div>
+                                <div class="item">测试工程师</div>
+                            </div>
+                        </div>
+                    </div>&nbsp;&nbsp;
+                    <div class="labels">
+                        <label><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;角色</b></label>
+                    </div>
+                    <div class="field added">
+                        <div class="ui selection dropdown">
+                            <input type="hidden" name="角色">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">请选择</div>
+                            <div class="menu">
+                                <div class="item">超级管理员</div>
+                                <div class="item">普通角色</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui primary ok button">确定</div>
+            <div class="ui basic cancel button">取消</div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function () {
+        $('.visible .ui.sidebar')
+            .sidebar({
+                context: '.visible .bottom.segment'
+            }).sidebar('hide');
+        $('.ui.dropdown')
+            .dropdown();
+        $('.ui.dropdown.department')
+            .dropdown({
+                clearable: true
+            });
+        $('.ui.delete.button')
+            .click(function () {
+                $(this).closest('tr').remove()
+            })
+        $('.ui.modal.edit')
+            .modal('attach events', '.ui.edit.button', 'show');
+        $('.ui.modal.reset')
+            .modal('attach events', '.ui.reset.button', 'show');
+        $('.ui.modal.delete')
+            .modal('attach events', '.ui.delete.button', 'show');
+        $('.ui.modal.added')
+            .modal('attach events', '.ui.added.button', 'show');
+        $('#rangestart').calendar({
+            type: 'date',
+            endCalendar: $('#rangeend')
+        });
+        $('#rangeend').calendar({
+            type: 'date',
+            startCalendar: $('#rangestart')
+        });
+        $('.ok.button')
+            .click(function () {
+                $('<tr></tr>').append('<td>{{current_user.username}}</td>')
+                    .append('<td>{{current_user.dept}}</td>')
+                    .append('<td>{{current_user.phonenumber}}</td>')
+                    .append('<td>{{current_user.email}}</td>')
+                    .appendTo($('table'))
+            });
+    });
+</script>
+
+{% endblock %}
