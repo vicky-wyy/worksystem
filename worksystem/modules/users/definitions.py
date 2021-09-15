@@ -90,14 +90,14 @@ class User(UserMixin):
             {'reset_password':self.itcode,'exp':time()+expires_in},
             app.config['SECRET_KEY'],algorithm='HS256'
         )
-    
+
         
     def verify_reset_password_token(token):
         try:
             itcode=jwt.decode(token,app.config['SECRET_KEY'],
                             algorithms=['HS256'])['reset_password']
         except Exception as e:
-            print(str(e))
+            print(str(e))      
         return itcode
     
 # email

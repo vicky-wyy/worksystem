@@ -117,8 +117,9 @@ def verify_reset(itcode,password):
             "$set": {"password": generate_password_hash(password)}
         }
     )
-    print(result.matched_count)
-    print(result.modified_count)
+    
+    
+    
     if result:
         return{
             "code": 1,
