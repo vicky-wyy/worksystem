@@ -14,13 +14,13 @@ def login():
         return redirect(url_for('management.index'))
     form = LoginForm()
     if form.validate_on_submit():
-        itcode_form = request.form.get('itcode')
+        itcode = request.form.get('itcode')
         print('用户名：：：：：：：：：：：：：')
-        print(itcode_form)
-        password_form = request.form.get('password')
+        print(itcode)
+        password = request.form.get('password')
         print('密码：：：：：：：：：：：：：：：：：：：')
-        print(password_form)
-        result = verify_login(itcode_form,password_form)
+        print(password)
+        result = verify_login(itcode,password)
         print("结果：：：：：：：：：：：：：：")
         print(result)
         if result['code'] == 2:
@@ -85,18 +85,17 @@ def reset_password_request():
 
 @users.route('/reset_password/<token>',methods=['GET' ,'POST'])
 def reset_password(token):
-    user = User.verify_reset_password_token(token)
+    itcode = User.verify_reset_password_token(token)
     # 如果用户不存在，就进行注册
-    if not user:
+    if not itcode:
         flash("该用户不存在，请您先进行注册")
         return redirect(url_for('users.register'))
     form = ResetPasswordForm()
     if form.validate_on_submit():
         print('重置密码成功啦')
-        itcode = request.form.get("itcode")
         password = request.form.get("password")
         result = verify_reset(itcode,password)
-        flash(user.itcode+'您的密码已经被重置，请用新密码登录您的账号')
+        flash('您的密码已经被重置，请用新密码登录您的账号')
         print("result==================================")
         print(result)
         return redirect(url_for('users.login'))

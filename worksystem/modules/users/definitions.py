@@ -98,8 +98,7 @@ class User(UserMixin):
                             algorithms=['HS256'])['reset_password']
         except Exception as e:
             print(str(e))
-            return 
-        return User.get_itcode(itcode)
+        return itcode
     
 # email
     # def send_async_email(app,msg):

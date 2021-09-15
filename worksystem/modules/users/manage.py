@@ -66,10 +66,10 @@ def verify_register(itcode, password):
     }
 
 
-def verify_login(itcode_form, password_form):
+def verify_login(itcode, password):
     result = mongo.db.student.find_one(
         {
-            "itcode": itcode_form
+            "itcode": itcode
         }
     )
     if result:
@@ -78,7 +78,7 @@ def verify_login(itcode_form, password_form):
                 "code": 3,
                 "msg": "账号已被禁用"
             }
-        if not check_password_hash(result['password'],password_form):
+        if not check_password_hash(result['password'],password):
             return {
                 "code": 0,
                 "msg": "密码错误"
@@ -108,22 +108,24 @@ def verify_login(itcode_form, password_form):
         }
 
 
-def verify_reset(itcode, password):
-    try:
-        mongo.db.student.update_one(
-            {
-                "itcode": itcode
-            },
-            {
-                "$set": {"password": password}
-            }
-        )
-    except:
+def verify_reset(itcode,password):
+    result = mongo.db.student.update_one(
+        {
+            "itcode": itcode
+        },
+        {
+            "$set": {"password": generate_password_hash(password)}
+        }
+    )
+    print(result.matched_count)
+    print(result.modified_count)
+    if result:
+        return{
+            "code": 1,
+            "msg": "密码修改成功"
+        }
+    else:
         return {
             "code": 0,
             "msg": '密码修改失败'
         }
-    return{
-        "code": 1,
-        "msg": "密码修改成功"
-    }
